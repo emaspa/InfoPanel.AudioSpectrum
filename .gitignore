@@ -4,3 +4,5 @@ obj/
 *.suo
 .vs/
 test_wavelink.ps1
+release-staging/
+repack-staging/

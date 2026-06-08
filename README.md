@@ -32,7 +32,7 @@ The plugin also exposes per-band frequency sensors, peak level, and average leve
 
 ### Pre-built (recommended)
 
-1. Download the latest release from the [Releases](https://github.com/emaspa/infopanel-audio-spectrum/releases) page
+1. Download the latest release from the [Releases](https://github.com/emaspa/InfoPanel.AudioSpectrum/releases) page
 2. Extract the `InfoPanel.AudioSpectrum` folder into your InfoPanel plugins directory:
    ```
    C:\ProgramData\InfoPanel\plugins\InfoPanel.AudioSpectrum\
@@ -218,8 +218,8 @@ If you use [Elgato Wave Link](https://www.elgato.com/wave-link) to manage your a
 Clone the repository and build:
 
 ```bash
-git clone https://github.com/emaspa/infopanel-audio-spectrum.git
-cd infopanel-audio-spectrum
+git clone https://github.com/emaspa/InfoPanel.AudioSpectrum.git
+cd InfoPanel.AudioSpectrum
 ```
 
 If you have the InfoPanel source code alongside this project:
@@ -246,6 +246,16 @@ C:\ProgramData\InfoPanel\plugins\InfoPanel.AudioSpectrum\
 ```
 
 If you already have a config file (`InfoPanel.AudioSpectrum.dll.ini`) in that folder, copying just the DLL files will preserve your settings.
+
+### Packaging a release
+
+To produce a registry-compliant release ZIP, run:
+
+```powershell
+.\build-release.ps1
+```
+
+This publishes the plugin and packages the output into `InfoPanel.AudioSpectrum-v<version>.zip`, with all files inside a top-level `InfoPanel.AudioSpectrum/` folder as required by the [InfoPanel plugin registry](https://github.com/habibrehmansg/infopanel/blob/1.4.x/PLUGIN-REGISTRY.md). The version is read from `PluginInfo.ini` (override with `-Version`).
 
 ## Writing Your Own InfoPanel Plugin
 
