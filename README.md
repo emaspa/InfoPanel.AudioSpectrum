@@ -374,4 +374,4 @@ If you find this plugin useful, consider supporting the project:
 
 ## License
 
-MIT
+MIT, see [LICENSE](LICENSE).
