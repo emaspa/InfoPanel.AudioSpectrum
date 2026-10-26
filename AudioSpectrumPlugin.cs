@@ -36,7 +36,8 @@ namespace InfoPanel.AudioSpectrum
         }
 
         public override string? ConfigFilePath => SpectrumConfig.FilePath;
-        public override TimeSpan UpdateInterval => TimeSpan.FromMilliseconds(33); // ~30fps
+        private TimeSpan _updateIntervalMilliseconds = TimeSpan.FromSeconds(1.0/30);
+        public override TimeSpan UpdateInterval => _updateIntervalMilliseconds;
 
         public override void Initialize()
         {
@@ -159,6 +160,8 @@ namespace InfoPanel.AudioSpectrum
         {
             if (_capture == null || _analyzer == null || _renderer == null) return;
 
+            long startTime = Stopwatch.GetTimestamp();
+            TimeSpan targetFrameTime = TimeSpan.FromSeconds(1.0 / _config.TargetFps);
             try
             {
                 var samples = _capture.GetLatestSamples();
@@ -187,6 +190,14 @@ namespace InfoPanel.AudioSpectrum
                     _renderer.RenderToBitmap(bands, peaks, _spectrumWriter.Bitmap);
                     _spectrumWriter.Invalidate();
                 }
+                TimeSpan remainingTime = targetFrameTime - Stopwatch.GetElapsedTime(startTime);
+                if (remainingTime < TimeSpan.Zero)
+                {
+                    // Ensure a minimum delay when processing exceeds the target frame time
+                    // to prevent the update loop from running continuously.
+                    remainingTime = TimeSpan.FromMilliseconds(10);
+                }
+                _updateIntervalMilliseconds = remainingTime;
             }
             catch (Exception ex)
             {
@@ -391,6 +402,12 @@ namespace InfoPanel.AudioSpectrum
                         }
                     }
                     break;
+                case "TargetFps":
+                    if (value is int fps) 
+                    {
+                        _config.TargetFps = Math.Clamp(fps, 1, 30); 
+                    }
+                    break;
             }
 
             _config.Save();
@@ -466,6 +483,8 @@ namespace InfoPanel.AudioSpectrum
                 new() { Key = "TrimBands", DisplayName = "Trim Bands", Type = PluginConfigType.Integer,
                     Value = _config.TrimBands, MinValue = 0, MaxValue = 20, Step = 1,
                     Description = "Number of bands to cut from each side (removes low-energy edges)" },
+                new() { Key = "TargetFps", DisplayName = "Target FPS", Type = PluginConfigType.Integer,
+                    Value = _config.TargetFps, MinValue = 1, MaxValue = 30, Step = 1 },
             ];
         }
 

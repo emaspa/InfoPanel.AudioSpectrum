@@ -45,6 +45,7 @@ namespace InfoPanel.AudioSpectrum
         public float NoiseFloor { get; set; } = 0f;
         public int TrimBands { get; set; } = 0;
         public bool FollowWaveLink { get; set; } = false;
+        public int TargetFps { get; set; } = 30;
 
         public void Load()
         {
@@ -87,6 +88,7 @@ namespace InfoPanel.AudioSpectrum
             SetDefault("NoiseFloor", "0");
             SetDefault("TrimBands", "0");
             SetDefault("FollowWaveLink", "false");
+            SetDefault("TargetFps", "30");
 
             // Write available audio devices as comments
             try
@@ -171,6 +173,8 @@ namespace InfoPanel.AudioSpectrum
             NoiseFloor = Math.Clamp(NoiseFloor, 0f, 1f);
             TrimBands = Math.Clamp(TrimBands, 0, 20);
 
+            // Target FPS
+            TargetFps = GetInt("TargetFps", 30); ;
         }
 
         private int GetInt(string key, int defaultValue)
@@ -232,6 +236,7 @@ namespace InfoPanel.AudioSpectrum
             _iniData[SECTION]["NoiseFloor"] = NoiseFloor.ToString(System.Globalization.CultureInfo.InvariantCulture);
             _iniData[SECTION]["TrimBands"] = TrimBands.ToString();
             _iniData[SECTION]["FollowWaveLink"] = FollowWaveLink.ToString().ToLower();
+            _iniData[SECTION]["TargetFps"] = TargetFps.ToString();
 
             var parser = new FileIniDataParser();
             parser.WriteFile(ConfigFilePath, _iniData);
