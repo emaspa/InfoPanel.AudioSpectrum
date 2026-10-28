@@ -103,6 +103,7 @@ EdgeBoost = 5
 NoiseFloor = 0
 TrimBands = 0
 FollowWaveLink = false
+TargetFps = 30
 ```
 
 ### Settings Reference
@@ -121,6 +122,7 @@ FollowWaveLink = false
 | `ImageWidth` | `400` | 100 - 3840 | Width of the rendered spectrum image in pixels. |
 | `ImageHeight` | `150` | 50 - 2160 | Height of the rendered spectrum image in pixels. |
 | `BackgroundColor` | `#FF000000` | Hex color | Background color. Use `Transparent` for no background, or an ARGB hex value like `#FF000000` (opaque black). |
+| `TargetFps` | `30` | 1 - 30 | Frames per second to render. Lower values reduce CPU usage and power draw, useful on low-power machines or when the panel refreshes slowly. |
 
 #### Spectrum Analysis
 
@@ -364,7 +366,7 @@ For more details, see the [InfoPanel plugin documentation](https://github.com/ha
 - **Frequency mapping**: Logarithmic band spacing from 20 Hz to 20 kHz
 - **Rendering**: SkiaSharp (Skia) for all drawing, direct shared memory bitmap output
 - **Image transfer**: Zero-copy shared memory via `IPluginImageProvider` / memory-mapped files
-- **Update rate**: ~30 FPS (33ms interval)
+- **Update rate**: configurable via `TargetFps` (default 30 FPS); the update interval is shortened by the frame's processing time to hold the target rate
 
 ## Support
 
