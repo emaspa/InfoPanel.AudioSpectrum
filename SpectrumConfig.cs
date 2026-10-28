@@ -174,7 +174,7 @@ namespace InfoPanel.AudioSpectrum
             TrimBands = Math.Clamp(TrimBands, 0, 20);
 
             // Target FPS
-            TargetFps = GetInt("TargetFps", 30); ;
+            TargetFps = Math.Clamp(GetInt("TargetFps", 30), 1, 30);
         }
 
         private int GetInt(string key, int defaultValue)
